@@ -1,7 +1,9 @@
 package com.tommy.autocheckin.utils;
 
 
+import java.io.Closeable;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class ShellUtils {
@@ -39,9 +41,26 @@ public class ShellUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            CloseUtils.closeIO(os);
+            closeIO(os);
             if (process != null) {
                 process.destroy();
+            }
+        }
+    }
+    /**
+     * 关闭IO
+     *
+     * @param closeables closeable
+     */
+    public static void closeIO(Closeable... closeables) {
+        if (closeables == null) return;
+        for (Closeable closeable : closeables) {
+            if (closeable != null) {
+                try {
+                    closeable.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
